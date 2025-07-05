@@ -17,7 +17,7 @@ website = "https://cal.com/"
 code = "https://github.com/calcom"
 
 [integration]
-yunohost = ">= 11.2.14"
+yunohost = ">= 11.2.30"
 architectures = "all"
 multi_instance = true
 
@@ -42,8 +42,8 @@ ram.runtime = "50M"
     [resources.sources]
 
     [resources.sources.main]
-    url = "https://github.com/calcom/cal.com/archive/refs/tags/v5.1.16.tar.gz"
-    sha256 = "c5074769e46c821217524820fade32842430eb71bbb53965eee2e732859bc55e"
+    url = "https://github.com/calcom/cal.com/archive/refs/tags/v5.4.14.tar.gz"
+    sha256 = "776e5e6ee83466d5dc9b680765e0ad0b309e2baf9248cc99b7e1bce764b23ace"
 
     autoupdate.strategy = "latest_github_tag"
 
