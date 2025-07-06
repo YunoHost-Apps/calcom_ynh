@@ -7,7 +7,7 @@ name = "cal.com"
 description.en = "Appointment scheduling application"
 description.fr = "Application de planification de rendez-vous"
 
-version = "4.1.10~ynh1"
+version = "5.1.16~ynh1"
 
 maintainers = ["eric_G"]
 
@@ -17,7 +17,7 @@ website = "https://cal.com/"
 code = "https://github.com/calcom"
 
 [integration]
-yunohost = ">= 11.2.18"
+yunohost = ">= 12.0.9"
 helpers_version = "2.1"
 architectures = "all"
 multi_instance = true
@@ -27,7 +27,7 @@ ldap = false
 sso = false
 
 disk = "50M"
-ram.build = "2G"
+ram.build = "8G"
 ram.runtime = "50M"
 
 [install]
@@ -43,8 +43,8 @@ ram.runtime = "50M"
     [resources.sources]
 
     [resources.sources.main]
-    url = "https://github.com/calcom/cal.com/archive/refs/tags/v4.1.10.tar.gz"
-    sha256 = "498dd15198c5724f24d0909dc83f8097cefc2fdfa19b58b1695dcd9fee1076c1"
+    url = "https://github.com/calcom/cal.com/archive/refs/tags/v5.4.14.tar.gz"
+    sha256 = "776e5e6ee83466d5dc9b680765e0ad0b309e2baf9248cc99b7e1bce764b23ace"
 
     autoupdate.strategy = "latest_github_tag"
 
