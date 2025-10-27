@@ -17,7 +17,7 @@ website = "https://cal.com/"
 code = "https://github.com/calcom"
 
 [integration]
-yunohost = ">= 12.1.30"
+yunohost = ">= 12.1.28"
 architectures = "all"
 multi_instance = true
 
