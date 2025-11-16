@@ -55,6 +55,7 @@ ram.runtime = "50M"
     main.url = "/"
 
     [resources.ports]
+    main.default = 3000
 
     [resources.apt]
     packages = "postgresql, yarn"
