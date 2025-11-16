@@ -56,12 +56,15 @@ ynh_script_progression --message="Temporary adding additional swap if needed..."
 myynh_add_swap
 
 #=================================================
-# INSTALL CAL.COM WITH NPM
+# INSTALL CAL.COM WITH YARN
 #=================================================
 ynh_script_progression --message="Installing $app..." --weight=1
 
-pushd $install_dir/apps/web/
- 	ynh_use_nodejs
+pushd $install_dir
+	ynh_use_nodejs
+	corepack enable
+	ynh_hide_warnings npm install -g corepack
+	ynh_hide_warnings corepack prepare yarn --activate
 	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH NODE_OPTIONS="--max-old-space-size=4096" yarn
 	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH NODE_OPTIONS="--max-old-space-size=8192" yarn build	
 popd
