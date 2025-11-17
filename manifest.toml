@@ -19,7 +19,7 @@ code = "https://github.com/calcom"
 [integration]
 yunohost = ">= 12.1.28"
 architectures = "all"
-multi_instance = true
+multi_instance = false
 
 ldap = false
 
