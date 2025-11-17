@@ -8,13 +8,7 @@ source _common.sh
 source /usr/share/yunohost/helpers
 
 key=$(ynh_string_random --length=32)
-
-#=================================================
-# INSTALL DEPENDENCIES
-#=================================================
-ynh_script_progression "Installing dependencies..."
-
-ynh_nodejs_install
+ynh_app_setting_set --key="key" --value="$key"
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
@@ -23,7 +17,6 @@ ynh_script_progression "Setting up source files..."
 
 ynh_setup_source --dest_dir="$install_dir"
 
-#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown -R "$app:www-data" "$install_dir"
 #=================================================
 # APP INITIAL CONFIGURATION
 #=================================================
@@ -31,11 +24,6 @@ ynh_script_progression "Adding $app's configuration files..."
 
 ynh_config_add --template=".env" --destination="$install_dir/.env"
 ynh_config_add --template=".env" --destination="$install_dir/.env.appStore"
-
-#REMOVEME? Assuming the file is setup using ynh_config_add, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod 400 "$install_dir/.env"
-#REMOVEME? Assuming the file is setup using ynh_config_add, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown "$app:$app" "$install_dir/.env"
-#REMOVEME? Assuming the file is setup using ynh_config_add, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod 400 "$install_dir/.env.appStore"
-#REMOVEME? Assuming the file is setup using ynh_config_add, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown "$app:$app" "$install_dir/.env.appStore"
 
 #=================================================
 # SYSTEM CONFIGURATION
@@ -63,13 +51,11 @@ myynh_add_swap
 ynh_script_progression "Installing $app..."
 
 pushd $install_dir
-
 	ynh_hide_warnings npm install -g corepack
 	ynh_hide_warnings corepack prepare yarn@latest --activate
-	ynh_hide_warnings ynh_exec_as_app node_load_PATH NODE_OPTIONS="--max-old-space-size=4096" yarn
-	ynh_hide_warnings ynh_exec_as_app node_load_PATH yarn workspace @calcom/prisma db-deploy
-	ynh_hide_warnings ynh_exec_as_app node_load_PATH NODE_OPTIONS="--max-old-space-size=8192" yarn build
-
+	ynh_hide_warnings ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=4096" yarn
+	ynh_hide_warnings ynh_exec_as_app yarn workspace @calcom/prisma db-deploy
+	ynh_hide_warnings ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=8192" yarn build
 popd
 
 #=================================================

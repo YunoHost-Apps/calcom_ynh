@@ -23,7 +23,6 @@ architectures = "all"
 multi_instance = false
 
 ldap = false
-
 sso = false
 
 disk = "50M"
@@ -63,3 +62,6 @@ ram.runtime = "50M"
 
     [resources.database]
     type = "postgresql"
+
+    [resources.nodejs]
+    version = "22"

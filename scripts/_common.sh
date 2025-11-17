@@ -4,8 +4,6 @@
 # COMMON VARIABLES AND CUSTOM HELPERS
 #=================================================
 
-nodejs_version=22
-
 # Add swap if needed
 myynh_add_swap() {
 	# Remove existing SWAP
