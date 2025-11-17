@@ -18,6 +18,7 @@ code = "https://github.com/calcom"
 
 [integration]
 yunohost = ">= 12.1.28"
+helpers_version = "2.1"
 architectures = "all"
 multi_instance = false
 
