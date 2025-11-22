@@ -7,7 +7,7 @@ name = "cal.com"
 description.en = "Appointment scheduling application"
 description.fr = "Application de planification de rendez-vous"
 
-version = "4.1.10~ynh1"
+version = "5.9.0~ynh1"
 
 maintainers = ["eric_G"]
 
@@ -17,16 +17,16 @@ website = "https://cal.com/"
 code = "https://github.com/calcom"
 
 [integration]
-yunohost = ">= 11.2.14"
+yunohost = ">= 12.1.28"
 architectures = "all"
-multi_instance = true
+multi_instance = false
 
 ldap = false
 
 sso = false
 
 disk = "50M"
-ram.build = "2G"
+ram.build = "8G"
 ram.runtime = "50M"
 
 [install]
@@ -42,8 +42,8 @@ ram.runtime = "50M"
     [resources.sources]
 
     [resources.sources.main]
-    url = "https://github.com/calcom/cal.com/archive/refs/tags/v4.1.10.tar.gz"
-    sha256 = "498dd15198c5724f24d0909dc83f8097cefc2fdfa19b58b1695dcd9fee1076c1"
+    url = "https://github.com/calcom/cal.com/archive/refs/tags/v5.9.0.tar.gz"
+    sha256 = "6c795f7e13671a7a5f0d52fcd1f839f2ef08346202bb36f94494fd2baafb2aab"
 
     autoupdate.strategy = "latest_github_tag"
 
@@ -55,12 +55,10 @@ ram.runtime = "50M"
     main.url = "/"
 
     [resources.ports]
+    main.default = 3000
 
     [resources.apt]
-    packages = "postgresql"
-    extras.yarn.repo = "deb https://dl.yarnpkg.com/debian/ stable main"
-    extras.yarn.key = "https://dl.yarnpkg.com/debian/pubkey.gpg"
-    extras.yarn.packages = "yarn"
+    packages = "postgresql, yarn"
 
     [resources.database]
     type = "postgresql"
