@@ -11,7 +11,7 @@ source /usr/share/yunohost/helpers
 #=================================================
 # RESTORE DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Restoring dependencies..."
+ynh_script_progression "Restoring dependencies..."
 
 ynh_hide_warnings ynh_nodejs_install
 ynh_hide_warnings npm install -g corepack
@@ -46,14 +46,14 @@ yunohost service add "$app" --description="Appointment scheduling app" --log="/v
 #=================================================
 # ADD SWAP IF NEEDED
 #=================================================
-ynh_script_progression --message="Temporary adding additional swap if needed..."
+ynh_script_progression "Temporary adding additional swap if needed..."
 
 myynh_add_swap
 
 #=================================================
 # INSTALL CAL.COM WITH YARN
 #=================================================
-ynh_script_progression --message="Installing $app..."
+ynh_script_progression ="Installing $app..."
 
 pushd $install_dir
 	ynh_hide_warnings ynh_exec_as $app $ynh_node_load_PATH NODE_OPTIONS="--max-old-space-size=4096" yarn
@@ -64,7 +64,7 @@ popd
 #=================================================
 # REMOVE TEMPORARY SWAP IF ADDED
 #=================================================
-ynh_script_progression --message="Remove temporary swap if added..."
+ynh_script_progression "Remove temporary swap if added..."
 
 ynh_del_swap_fixed
 
