@@ -11,9 +11,11 @@ source /usr/share/yunohost/helpers
 #=================================================
 # RESTORE DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Restoring dependencies..." --weight=1
+ynh_script_progression --message="Restoring dependencies..."
 
-ynh_exec_warn_less ynh_install_nodejs --nodejs_version=$nodejs_version
+ynh_hide_warnings ynh_nodejs_install
+ynh_hide_warnings npm install -g corepack
+ynh_hide_warnings corepack prepare yarn@latest --activate
 
 #=================================================
 # RESTORE THE APP MAIN DIR
@@ -51,15 +53,12 @@ myynh_add_swap
 #=================================================
 # INSTALL CAL.COM WITH YARN
 #=================================================
-ynh_script_progression --message="Installing $app..." --weight=1
+ynh_script_progression --message="Installing $app..."
 
 pushd $install_dir
-	ynh_use_nodejs
-	ynh_exec_warn_less npm install -g corepack
-	ynh_exec_warn_less corepack prepare yarn@latest --activate
-	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH NODE_OPTIONS="--max-old-space-size=4096" yarn
-	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH yarn workspace @calcom/prisma db-deploy
-	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH NODE_OPTIONS="--max-old-space-size=8192" yarn build	
+	ynh_hide_warnings ynh_exec_as $app $ynh_node_load_PATH NODE_OPTIONS="--max-old-space-size=4096" yarn
+	ynh_hide_warnings ynh_exec_as $app $ynh_node_load_PATH yarn workspace @calcom/prisma db-deploy
+	ynh_hide_warnings ynh_exec_as $app $ynh_node_load_PATH NODE_OPTIONS="--max-old-space-size=8192" yarn build	
 popd
 
 #=================================================
