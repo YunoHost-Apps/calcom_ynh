@@ -17,9 +17,9 @@ ynh_systemctl --service="$app" --action="stop"
 #=================================================
 # UPGRADE DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Upgrading dependencies..." --weight=1
+ynh_script_progression --message="Upgrading dependencies..."
 
-ynh_nodejs_install
+ynh_hide_warnings ynh_nodejs_install
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
