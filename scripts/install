@@ -15,7 +15,7 @@ ynh_app_setting_set --key="key" --value="$key"
 #=================================================
 ynh_script_progression "Installing dependencies..."
 
-ynh_nodejs_install
+ynh_hide_warnings ynh_nodejs_install
 ynh_hide_warnings npm install -g corepack
 ynh_hide_warnings corepack prepare yarn@latest --activate
 
