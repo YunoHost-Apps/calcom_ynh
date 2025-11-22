@@ -36,9 +36,9 @@ myynh_add_swap() {
 	if [ $ram_free_G -lt $ram_needed_G ]
 	then
 		# Remove existing SWAP
-			ynh_del_swap_fixed
+		ynh_del_swap_fixed
 		# Terminate install/upgarde script
-			ynh_die "There is no enough free memory on your system ($ram_needed_G GB are needed to build successfully $app). You need to either add RAM or manually add swap to your system."
+		ynh_die "There is no enough free memory on your system ($ram_needed_G GB are needed to build successfully $app). You need to either add RAM or manually add swap to your system."
 	fi
 }
 
