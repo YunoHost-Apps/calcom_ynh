@@ -1,5 +1,5 @@
 [Unit]
-Description=Cal.com: 
+Description=Cal.com: Appointment scheduling app
 After=network.target
 
 [Service]

@@ -1,1 +1,1 @@
-Cal.com est un planificateur d'événements pour tous.
+Cal.com est une application de planification de rendez-vous. C'est une alternative à Calendly et vous permet de planifier efficacement des réunions, des rendez-vous et de lier des services externes tels que Google Calendar, Zoom via un tableau de bord Web simple à utiliser.

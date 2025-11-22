@@ -30,10 +30,13 @@ chown -R "$app:www-data" "$install_dir"
 #=================================================
 ynh_script_progression --message="Adding $app's configuration files..." --weight=1
 
-ynh_add_config --template=".env" --destination="$install_dir/apps/web/.env"
+ynh_add_config --template=".env" --destination="$install_dir/.env"
+ynh_add_config --template=".env" --destination="$install_dir/.env.appStore"
 
-chmod 400 "$install_dir/apps/web/.env"
-chown "$app:$app" "$install_dir/apps/web/.env"
+chmod 400 "$install_dir/.env"
+chown "$app:$app" "$install_dir/.env"
+chmod 400 "$install_dir/.env.appStore"
+chown "$app:$app" "$install_dir/.env.appStore"
 
 #=================================================
 # SYSTEM CONFIGURATION
@@ -46,18 +49,35 @@ ynh_add_nginx_config
 # Create a dedicated systemd config
 ynh_add_systemd_config
 
-yunohost service add "$app" --description="A short description of the app" --log="/var/log/$app/$app.log"
+yunohost service add "$app" --description="Appointment scheduling app" --log="/var/log/$app/$app.log"
 
 #=================================================
-# INSTALL CAL.COM WITH NPM
+# ADD SWAP IF NEEDED
+#=================================================
+ynh_script_progression --message="Temporary adding additional swap if needed..."
+
+myynh_add_swap
+
+#=================================================
+# INSTALL CAL.COM WITH YARN
 #=================================================
 ynh_script_progression --message="Installing $app..." --weight=1
 
-pushd $install_dir/apps/web/
- 	ynh_use_nodejs
-	env $ynh_node_load_PATH yarn
-	env $ynh_node_load_PATH yarn build	
+pushd $install_dir
+	ynh_use_nodejs
+	ynh_exec_warn_less npm install -g corepack
+	ynh_exec_warn_less corepack prepare yarn@latest --activate
+	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH NODE_OPTIONS="--max-old-space-size=4096" yarn
+	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH yarn workspace @calcom/prisma db-deploy
+	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH NODE_OPTIONS="--max-old-space-size=8192" yarn build	
 popd
+
+#=================================================
+# REMOVE TEMPORARY SWAP IF ADDED
+#=================================================
+ynh_script_progression --message="Remove temporary swap if added..."
+
+ynh_del_swap_fixed
 
 #=================================================
 # START SYSTEMD SERVICE
