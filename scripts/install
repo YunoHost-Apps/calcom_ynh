@@ -11,6 +11,15 @@ key=$(ynh_string_random --length=32)
 ynh_app_setting_set --key="key" --value="$key"
 
 #=================================================
+# INSTALL DEPENDENCIES
+#=================================================
+ynh_script_progression "Installing dependencies..."
+
+ynh_nodejs_install
+ynh_hide_warnings npm install -g corepack
+ynh_hide_warnings corepack prepare yarn@latest --activate
+
+#=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
 ynh_script_progression "Setting up source files..."
@@ -46,20 +55,11 @@ ynh_script_progression "Temporary adding additional swap if needed..."
 myynh_add_swap
 
 #=================================================
-# INSTALL DEPENDENCIES
-#=================================================
-ynh_script_progression "Installing dependencies..."
-
-ynh_hide_warnings corepack enable && corepack prepare yarn@latest --activate
-
-#=================================================
 # INSTALL CAL.COM WITH YARN
 #=================================================
 ynh_script_progression "Installing $app..."
 
 pushd $install_dir
-	#ynh_hide_warnings npm install -g corepack
-	#ynh_hide_warnings corepack prepare yarn@latest --activate
 	ynh_hide_warnings ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=4096" yarn
 	ynh_hide_warnings ynh_exec_as_app yarn workspace @calcom/prisma db-deploy
 	ynh_hide_warnings ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=8192" yarn build
