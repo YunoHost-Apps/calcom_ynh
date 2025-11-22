@@ -20,7 +20,7 @@ Appointment scheduling application
 
 
 ## Screenshots
-![Screenshot of cal.com](./doc/screenshots/example.jpg)
+![Screenshot of cal.com](./doc/screenshots/screenshot.png)
 
 ## 📦 Developer info
 
