@@ -7,14 +7,14 @@ name = "cal.com"
 description.en = "Appointment scheduling application"
 description.fr = "Application de planification de rendez-vous"
 
-version = "5.9.0~ynh1"
+version = "5.9.3~ynh1"
 
-maintainers = ["eric_G"]
+maintainers = ["CodeShakingSheep"]
 
 [upstream]
 license = "AGPL-3.0"
 website = "https://cal.com/"
-code = "https://github.com/calcom"
+code = "https://github.com/calcom/cal.com"
 
 [integration]
 yunohost = ">= 12.1.28"
@@ -42,10 +42,11 @@ ram.runtime = "50M"
     [resources.sources]
 
     [resources.sources.main]
-    url = "https://github.com/calcom/cal.com/archive/refs/tags/v5.9.0.tar.gz"
-    sha256 = "6c795f7e13671a7a5f0d52fcd1f839f2ef08346202bb36f94494fd2baafb2aab"
+    url = "https://github.com/calcom/cal.com/archive/refs/tags/v5.9.3.tar.gz"
+    sha256 = "c3423fbe694122fcf9adbf6da7b9dc3225d9c0c62f68a6c16633a75196b16bbb"
 
-    autoupdate.strategy = "latest_github_tag"
+    autoupdate.strategy = "latest_github_release"
+    autoupdate.asset = "^v.*.tar.gz"
 
     [resources.system_user]
 
