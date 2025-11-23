@@ -16,8 +16,6 @@ ynh_app_setting_set --key="key" --value="$key"
 ynh_script_progression "Installing dependencies..."
 
 ynh_hide_warnings ynh_nodejs_install
-ynh_hide_warnings npm install -g corepack
-ynh_hide_warnings corepack prepare yarn@latest --activate
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
@@ -60,6 +58,8 @@ myynh_add_swap
 ynh_script_progression "Installing $app..."
 
 pushd $install_dir
+	ynh_hide_warnings npm install -g corepack
+	ynh_hide_warnings corepack prepare yarn@latest --activate
 	ynh_hide_warnings ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=4096" yarn
 	ynh_hide_warnings ynh_exec_as_app yarn workspace @calcom/prisma db-deploy
 	ynh_hide_warnings ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=8192" yarn build
