@@ -67,7 +67,7 @@ pushd $install_dir
 popd
 
 # Remove unused files (size found with  du -h --max-depth=1 /var/www/calcom | sort -hr)
-ynh_safe_rm $install_dir/.yarn
+#ynh_safe_rm $install_dir/.yarn
 ynh_safe_rm $install_dir/.cache
 ynh_safe_rm $install_dir/.turbo
 ynh_safe_rm $install_dir/.github
