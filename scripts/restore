@@ -13,7 +13,6 @@ source /usr/share/yunohost/helpers
 #=================================================
 ynh_script_progression "Restoring dependencies..."
 
-ynh_hide_warnings ynh_nodejs_install
 ynh_hide_warnings npm install -g corepack
 ynh_hide_warnings corepack prepare yarn@latest --activate
 
