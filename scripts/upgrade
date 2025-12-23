@@ -48,12 +48,16 @@ ynh_config_add_systemd
 
 yunohost service add "$app" --description="Appointment scheduling app" --log="/var/log/$app/$app.log"
 
+# We don't add swap in CI but well in real installations
+if ! ynh_in_ci_tests; then
 #=================================================
 # ADD SWAP IF NEEDED
 #=================================================
 ynh_script_progression "Temporary adding additional swap if needed..."
 
 myynh_add_swap
+
+fi
 
 #=================================================
 # INSTALL CAL.COM WITH NPM
@@ -74,12 +78,16 @@ ynh_safe_rm $install_dir/.github
 ynh_safe_rm $install_dir/docs
 ynh_safe_rm $install_dir/.agents
 
+# We don't add swap in CI but well in real installations
+if ! ynh_in_ci_tests; then
 #=================================================
 # REMOVE TEMPORARY SWAP IF ADDED
 #=================================================
 ynh_script_progression "Remove temporary swap if added..."
 
 ynh_del_swap_fixed
+
+fi
 
 #=================================================
 # START SYSTEMD SERVICE
