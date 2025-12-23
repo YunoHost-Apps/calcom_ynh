@@ -18,15 +18,15 @@ code = "https://github.com/calcom/cal.com"
 
 [integration]
 yunohost = ">= 12.1.28"
+helpers_version = "2.1"
 architectures = "all"
 multi_instance = false
 
 ldap = false
-
 sso = false
 
 disk = "50M"
-ram.build = "8G"
+ram.build = "7500M"
 ram.runtime = "50M"
 
 [install]
@@ -62,3 +62,6 @@ ram.runtime = "50M"
 
     [resources.database]
     type = "postgresql"
+
+    [resources.nodejs]
+    version = "22"

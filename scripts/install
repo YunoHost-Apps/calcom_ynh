@@ -8,86 +8,87 @@ source _common.sh
 source /usr/share/yunohost/helpers
 
 key=$(ynh_string_random --length=32)
+ynh_app_setting_set --key="key" --value="$key"
 
 #=================================================
 # INSTALL DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Installing dependencies..." --weight=1
+ynh_script_progression "Installing dependencies..."
 
-ynh_exec_warn_less ynh_install_nodejs --nodejs_version=$nodejs_version
+ynh_hide_warnings ynh_nodejs_install
+ynh_hide_warnings npm install -g corepack
+ynh_hide_warnings corepack prepare yarn@latest --activate
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
-ynh_script_progression --message="Setting up source files..." --weight=1
+ynh_script_progression "Setting up source files..."
 
 ynh_setup_source --dest_dir="$install_dir"
-
-chown -R "$app:www-data" "$install_dir"
 
 #=================================================
 # APP INITIAL CONFIGURATION
 #=================================================
-ynh_script_progression --message="Adding $app's configuration files..." --weight=1
+ynh_script_progression "Adding $app's configuration files..."
 
-ynh_add_config --template=".env" --destination="$install_dir/.env"
-ynh_add_config --template=".env" --destination="$install_dir/.env.appStore"
-
-chmod 400 "$install_dir/.env"
-chown "$app:$app" "$install_dir/.env"
-chmod 400 "$install_dir/.env.appStore"
-chown "$app:$app" "$install_dir/.env.appStore"
+ynh_config_add --template=".env" --destination="$install_dir/.env"
+ynh_config_add --template=".env" --destination="$install_dir/.env.appStore"
 
 #=================================================
 # SYSTEM CONFIGURATION
 #=================================================
-ynh_script_progression --message="Adding system configurations related to $app..." --weight=1
+ynh_script_progression "Adding system configurations related to $app..."
 
 # Create a dedicated NGINX config using the conf/nginx.conf template
-ynh_add_nginx_config
+ynh_config_add_nginx
 
 # Create a dedicated systemd config
-ynh_add_systemd_config
+ynh_config_add_systemd
 
 yunohost service add "$app" --description="Appointment scheduling app" --log="/var/log/$app/$app.log"
 
 #=================================================
 # ADD SWAP IF NEEDED
 #=================================================
-ynh_script_progression --message="Temporary adding additional swap if needed..."
+ynh_script_progression "Temporary adding additional swap if needed..."
 
 myynh_add_swap
 
 #=================================================
 # INSTALL CAL.COM WITH YARN
 #=================================================
-ynh_script_progression --message="Installing $app..." --weight=1
+ynh_script_progression "Installing $app..."
 
 pushd $install_dir
-	ynh_use_nodejs
-	ynh_exec_warn_less npm install -g corepack
-	ynh_exec_warn_less corepack prepare yarn@latest --activate
-	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH NODE_OPTIONS="--max-old-space-size=4096" yarn
-	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH yarn workspace @calcom/prisma db-deploy
-	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH NODE_OPTIONS="--max-old-space-size=8192" yarn build	
+	ynh_hide_warnings ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=4096" yarn
+	ynh_hide_warnings ynh_exec_as_app yarn workspace @calcom/prisma db-deploy
+	ynh_hide_warnings ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=8192" yarn build
 popd
+
+# Remove unused files (size found with  du -h --max-depth=1 /var/www/calcom | sort -hr)
+#ynh_safe_rm $install_dir/.yarn
+ynh_safe_rm $install_dir/.cache
+ynh_safe_rm $install_dir/.turbo
+ynh_safe_rm $install_dir/.github
+ynh_safe_rm $install_dir/docs
+ynh_safe_rm $install_dir/.agents
 
 #=================================================
 # REMOVE TEMPORARY SWAP IF ADDED
 #=================================================
-ynh_script_progression --message="Remove temporary swap if added..."
+ynh_script_progression "Remove temporary swap if added..."
 
 ynh_del_swap_fixed
 
 #=================================================
 # START SYSTEMD SERVICE
 #=================================================
-ynh_script_progression --message="Starting $app's systemd service..." --weight=1
+ynh_script_progression "Starting $app's systemd service..."
 
 # Start a systemd service
-ynh_systemd_action --service_name="$app" --action="start" --log_path="/var/log/$app/$app.log"
+ynh_systemctl --service="$app" --action="start"
 
 #=================================================
 # END OF SCRIPT
 #=================================================
-ynh_script_progression --message="Installation of $app completed" --last
+ynh_script_progression "Installation of $app completed"
