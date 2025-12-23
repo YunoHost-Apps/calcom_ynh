@@ -61,7 +61,7 @@ ynh_script_progression "Installing $app..."
 
 pushd $install_dir
 	ynh_hide_warnings ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=4096" yarn config set httpTimeout 1200000
-	ynh_hide_warnings ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=4096" npx turbo prune --scope=@calcom/web --scope=@calcom/trpc
+	ynh_hide_warnings ynh_exec_as_app $nodejs_dir/npx --yes npx turbo prune --scope=@calcom/web --scope=@calcom/trpc
 	ynh_hide_warnings ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=4096" yarn install
 
 	ynh_hide_warnings ynh_exec_as_app yarn workspace @calcom/prisma db-deploy
