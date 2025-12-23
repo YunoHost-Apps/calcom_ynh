@@ -60,18 +60,28 @@ myynh_add_swap
 ynh_script_progression "Installing $app..."
 
 pushd $install_dir
-	ynh_hide_warnings ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=4096" yarn
+	ynh_hide_warnings ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=4096" yarn config set httpTimeout 1200000
+	ynh_hide_warnings ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=4096" npx turbo prune --scope=@calcom/web --scope=@calcom/trpc
+	ynh_hide_warnings ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=4096" yarn install
+
 	ynh_hide_warnings ynh_exec_as_app yarn workspace @calcom/prisma db-deploy
+	# Build and make embed servable from web/public/embed folder
+	ynh_hide_warnings ynh_exec_as_app yarn workspace @calcom/trpc run build
+	ynh_hide_warnings ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=4096" yarn --cwd packages/embeds/embed-core workspace @calcom/embed-core run build
+	ynh_hide_warnings ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=4096" yarn --cwd apps/web workspace @calcom/web run build
 	ynh_hide_warnings ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=8192" yarn build
 popd
 
-# Remove unused files (size found with  du -h --max-depth=1 /var/www/calcom | sort -hr)
-#ynh_safe_rm $install_dir/.yarn
+# Remove unused files (by checking dockerfile and size found with  du -h --max-depth=1 /var/www/calcom | sort -hr)
 ynh_safe_rm $install_dir/.cache
 ynh_safe_rm $install_dir/.turbo
 ynh_safe_rm $install_dir/.github
 ynh_safe_rm $install_dir/docs
 ynh_safe_rm $install_dir/.agents
+
+ynh_safe_rm $install_dir/node_modules/.cache
+ynh_safe_rm $install_dir/.yarn/cache
+ynh_safe_rm $install_dir/apps/web/.next/cache
 
 #=================================================
 # REMOVE TEMPORARY SWAP IF ADDED
