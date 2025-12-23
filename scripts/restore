@@ -48,7 +48,10 @@ yunohost service add "$app" --description="Appointment scheduling app" --log="/v
 #=================================================
 ynh_script_progression "Temporary adding additional swap if needed..."
 
+# We don't add swap in CI but well in real installations
+if ! ynh_in_ci_tests; then
 myynh_add_swap
+fi
 
 #=================================================
 # INSTALL CAL.COM WITH YARN
@@ -66,7 +69,10 @@ popd
 #=================================================
 ynh_script_progression "Remove temporary swap if added..."
 
+# We don't add swap in CI but well in real installations
+if ! ynh_in_ci_tests; then
 ynh_del_swap_fixed
+fi
 
 #=================================================
 # RELOAD NGINX AND PHP-FPM OR THE APP SERVICE
