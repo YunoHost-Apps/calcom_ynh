@@ -66,7 +66,7 @@ pushd $install_dir
 
 	ynh_hide_warnings ynh_exec_as_app yarn workspace @calcom/prisma db-deploy
 	# Build and make embed servable from web/public/embed folder
-	ynh_hide_warnings ynh_exec_as_app yarn workspace @calcom/trpc run build
+	ynh_hide_warnings ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=8192" yarn workspace @calcom/trpc run build
 	ynh_hide_warnings ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=4096" yarn --cwd packages/embeds/embed-core workspace @calcom/embed-core run build
 	ynh_hide_warnings ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=4096" yarn --cwd apps/web workspace @calcom/web run build
 	ynh_hide_warnings ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=8192" yarn build
