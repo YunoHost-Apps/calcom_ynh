@@ -7,7 +7,7 @@ name = "cal.com"
 description.en = "Appointment scheduling application"
 description.fr = "Application de planification de rendez-vous"
 
-version = "5.9.14~ynh1"
+version = "6.0.3~ynh1"
 
 maintainers = ["CodeShakingSheep"]
 
@@ -18,15 +18,15 @@ code = "https://github.com/calcom/cal.com"
 
 [integration]
 yunohost = ">= 12.1.28"
+helpers_version = "2.1"
 architectures = "all"
 multi_instance = false
 
 ldap = false
-
 sso = false
 
 disk = "50M"
-ram.build = "8G"
+ram.build = "7500M"
 ram.runtime = "50M"
 
 [install]
@@ -42,8 +42,8 @@ ram.runtime = "50M"
     [resources.sources]
 
     [resources.sources.main]
-    url = "https://github.com/calcom/cal.com/archive/refs/tags/v5.9.14.tar.gz"
-    sha256 = "b09c0f316c93b703d625f6dff1c7515939615b0f6295a0cbb7086bdaea0d211a"
+    url = "https://github.com/calcom/cal.com/archive/refs/tags/v6.0.3.tar.gz"
+    sha256 = "384cce78c9051430efec7202b6b347909f095b54bf725d988b4945751243c98b"
 
     autoupdate.strategy = "latest_github_tag"
 
@@ -62,3 +62,6 @@ ram.runtime = "50M"
 
     [resources.database]
     type = "postgresql"
+
+    [resources.nodejs]
+    version = "22"
