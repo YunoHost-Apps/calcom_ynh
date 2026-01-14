@@ -7,7 +7,7 @@ name = "cal.com"
 description.en = "Appointment scheduling application"
 description.fr = "Application de planification de rendez-vous"
 
-version = "6.0.6~ynh1"
+version = "6.0.12~ynh1"
 
 maintainers = ["CodeShakingSheep"]
 
@@ -42,8 +42,8 @@ ram.runtime = "50M"
     [resources.sources]
 
     [resources.sources.main]
-    url = "https://github.com/calcom/cal.com/archive/refs/tags/v6.0.6.tar.gz"
-    sha256 = "6e4f1e1c2e0404b7e21cac3c51cab1e6258f78b92e4ff5d6c401e0aba14c7bb1"
+    url = "https://github.com/calcom/cal.com/archive/refs/tags/v6.0.12.tar.gz"
+    sha256 = "669f3f31474fba96b2375f7135c83c699673351dc3bdc3b1e5df42ec0e4f5a1c"
 
     autoupdate.strategy = "latest_github_tag"
 
