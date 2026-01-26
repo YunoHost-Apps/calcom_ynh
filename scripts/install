@@ -80,7 +80,7 @@ ynh_safe_rm $install_dir/apps/web/.next/cache
 #=================================================
 ynh_script_progression "Remove temporary swap if added..."
 
-ynh_del_swap_fixed
+ynh_del_swap
 
 #=================================================
 # START SYSTEMD SERVICE
