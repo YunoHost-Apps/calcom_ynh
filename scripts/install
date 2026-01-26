@@ -49,7 +49,7 @@ yunohost service add "$app" --description="Appointment scheduling app" --log="/v
 #=================================================
 # ADD SWAP IF NEEDED
 #=================================================
-ynh_script_progression "Temporary adding additional swap if needed..."
+ynh_script_progression "Temporarily adding additional swap if needed..."
 
 myynh_add_swap
 
