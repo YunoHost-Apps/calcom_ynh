@@ -61,10 +61,8 @@ ynh_script_progression "Installing $app..."
 pushd $install_dir
 	ynh_hide_warnings ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=4096" yarn
 	ynh_hide_warnings ynh_exec_as_app yarn workspace @calcom/prisma db-deploy
-popd
-
-pushd $install_dir/apps/web
-	ynh_hide_warnings ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=8192" yarn build
+	ynh_hide_warnings ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=8192" yarn workspaces foreach -A --exclude @calcom/web run build
+	ynh_hide_warnings ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=8192" yarn workspace @calcom/web run next build
 popd
 
 # Remove unused files (by checking dockerfile and size found with  du -h --max-depth=1 /var/www/calcom | sort -hr)
