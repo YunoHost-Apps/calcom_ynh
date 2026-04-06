@@ -47,12 +47,16 @@ ynh_config_add_systemd
 
 yunohost service add "$app" --description="Appointment scheduling app" --log="/var/log/$app/$app.log"
 
+# We don't add swap in CI but well in real installations
+if ! ynh_in_ci_tests; then
 #=================================================
 # ADD SWAP IF NEEDED
 #=================================================
 ynh_script_progression "Temporarily adding additional swap if needed..."
 
 myynh_add_swap
+
+fi
 
 #=================================================
 # INSTALL CAL.COM WITH YARN
@@ -62,7 +66,7 @@ ynh_script_progression "Installing $app..."
 pushd $install_dir
 	ynh_hide_warnings ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=4096" yarn
 	ynh_hide_warnings ynh_exec_as_app yarn workspace @calcom/prisma db-deploy
-	ynh_hide_warnings ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=8192" yarn exec turbo run build --filter=@calcom/web...
+	ynh_hide_warnings ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=8192" yarn build
 popd
 
 # Remove unused files (by checking dockerfile and size found with  du -h --max-depth=1 /var/www/calcom | sort -hr)
@@ -76,12 +80,16 @@ ynh_safe_rm $install_dir/node_modules/.cache
 ynh_safe_rm $install_dir/.yarn/cache
 ynh_safe_rm $install_dir/apps/web/.next/cache
 
+# We don't add swap in CI but well in real installations
+if ! ynh_in_ci_tests; then
 #=================================================
 # REMOVE TEMPORARY SWAP IF ADDED
 #=================================================
 ynh_script_progression "Remove temporary swap if added..."
 
 ynh_del_swap
+
+fi
 
 #=================================================
 # START SYSTEMD SERVICE
