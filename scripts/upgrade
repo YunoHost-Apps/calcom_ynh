@@ -15,6 +15,8 @@ if ynh_app_upgrading_from_version_before 6.2.0~ynh1; then
 		ynh_app_setting_set --key="calendso_encryption_key" --value="$key"
 		ynh_app_setting_set --key="key" --value=""
 	fi
+	nextauth_secret=$(ynh_app_setting_get --key="nextauth_secret")
+	calendso_encryption_key=$(ynh_app_setting_get --key="calendso_encryption_key")
 fi
 
 #=================================================
