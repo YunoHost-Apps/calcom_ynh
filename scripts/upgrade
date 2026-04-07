@@ -42,6 +42,17 @@ ynh_config_add_systemd
 yunohost service add "$app" --description="Appointment scheduling app" --log="/var/log/$app/$app.log"
 
 #=================================================
+# INSTALL DEPENDENCIES WITH YARN
+#=================================================
+ynh_script_progression "Installing $app..."
+
+pushd $install_dir
+	ynh_hide_warnings ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=4096" yarn
+	ynh_hide_warnings ynh_exec_as_app yarn workspace @calcom/prisma db-deploy
+	#ynh_hide_warnings ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=8192" yarn build
+popd
+
+#=================================================
 # CLEAN UP
 #=================================================
 ynh_script_progression "Cleaning up $app..."
