@@ -49,12 +49,11 @@ yunohost service add "$app" --description="Appointment scheduling app" --log="/v
 #=================================================
 # INSTALL DEPENDENCIES WITH YARN
 #=================================================
-ynh_script_progression "Installing $app..."
+ynh_script_progression "Installing $app dependencies..."
 
 pushd $install_dir
-	ynh_hide_warnings ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=4096" yarn
+	ynh_hide_warnings ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=2048" yarn
 	ynh_hide_warnings ynh_exec_as_app yarn workspace @calcom/prisma db-deploy
-	#ynh_hide_warnings ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=8192" yarn build
 popd
 
 #=================================================
