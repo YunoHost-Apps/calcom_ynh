@@ -7,6 +7,16 @@
 source _common.sh
 source /usr/share/yunohost/helpers
 
+if ynh_app_upgrading_from_version_before 6.2.0~ynh1; then
+  	ynh_script_progression "Update keys for $app..."
+	key=$(ynh_app_setting_get --app=$app --key=key)
+	if [ -n "$key" ]; then
+		ynh_app_setting_set --key="nextauth_secret" --value="$nextauth_secret"
+		ynh_app_setting_set --key="calendso_encryption_key" --value="$calendso_encryption_key"
+		ynh_app_setting_set --key="key" --value=""
+	fi
+fi
+
 #=================================================
 # STOP SYSTEMD SERVICE
 #=================================================
@@ -28,7 +38,8 @@ ynh_setup_source --source_id="calcom_prebuilt" --dest_dir="$install_dir" --full_
 ynh_script_progression "Updating $app's configuration files..."
 
 ynh_config_add --template=".env" --destination="$install_dir/.env"
-ynh_config_add --template=".env" --destination="$install_dir/.env.appStore"
+ynh_config_add --template=".env.appStore" --destination="$install_dir/.env.appStore"
+ynh_config_add --template="api.env" --destination="$install_dir/apps/api/v2/.env"
 
 #=================================================
 # REAPPLY SYSTEM CONFIGURATIONS
