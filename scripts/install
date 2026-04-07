@@ -23,7 +23,7 @@ ynh_hide_warnings corepack prepare yarn@latest --activate
 #=================================================
 ynh_script_progression "Setting up source files..."
 
-ynh_setup_source --dest_dir="$install_dir"
+ynh_setup_source --source_id="calcom_prebuilt" --dest_dir="$install_dir"
 
 #=================================================
 # APP INITIAL CONFIGURATION
@@ -47,22 +47,9 @@ ynh_config_add_systemd
 yunohost service add "$app" --description="Appointment scheduling app" --log="/var/log/$app/$app.log"
 
 #=================================================
-# ADD SWAP IF NEEDED
+# CLEAN UP
 #=================================================
-ynh_script_progression "Temporary adding additional swap if needed..."
-
-myynh_add_swap
-
-#=================================================
-# INSTALL CAL.COM WITH YARN
-#=================================================
-ynh_script_progression "Installing $app..."
-
-pushd $install_dir
-	ynh_hide_warnings ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=4096" yarn
-	ynh_hide_warnings ynh_exec_as_app yarn workspace @calcom/prisma db-deploy
-	ynh_hide_warnings ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=8192" yarn build
-popd
+ynh_script_progression "Clean up $app..."
 
 # Remove unused files (by checking dockerfile and size found with  du -h --max-depth=1 /var/www/calcom | sort -hr)
 ynh_safe_rm $install_dir/.cache
@@ -74,13 +61,6 @@ ynh_safe_rm $install_dir/.agents
 ynh_safe_rm $install_dir/node_modules/.cache
 ynh_safe_rm $install_dir/.yarn/cache
 ynh_safe_rm $install_dir/apps/web/.next/cache
-
-#=================================================
-# REMOVE TEMPORARY SWAP IF ADDED
-#=================================================
-ynh_script_progression "Remove temporary swap if added..."
-
-ynh_del_swap_fixed
 
 #=================================================
 # START SYSTEMD SERVICE
