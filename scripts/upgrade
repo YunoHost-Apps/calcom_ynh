@@ -44,14 +44,13 @@ yunohost service add "$app" --description="Appointment scheduling app" --log="/v
 #=================================================
 # CLEAN UP
 #=================================================
-ynh_script_progression "Clean up $app..."
+ynh_script_progression "Cleaning up $app..."
 
 # Remove unused files (by checking dockerfile and size found with  du -h --max-depth=1 /var/www/calcom | sort -hr)
-ynh_safe_rm $install_dir/.cache
 ynh_safe_rm $install_dir/.turbo
 ynh_safe_rm $install_dir/.github
 ynh_safe_rm $install_dir/docs
-ynh_safe_rm $install_dir/.agents
+ynh_safe_rm $install_dir/agents
 
 ynh_safe_rm $install_dir/node_modules/.cache
 ynh_safe_rm $install_dir/.yarn/cache
