@@ -35,7 +35,7 @@ ynh_script_progression "Upgrading source files..."
 ynh_setup_source --source_id="calcom_prebuilt" --dest_dir="$install_dir" --full_replace
 
 #=================================================
-# UPDATE A CONFIG FILE
+# UPDATE CONFIG FILES
 #=================================================
 ynh_script_progression "Updating $app's configuration files..."
 
