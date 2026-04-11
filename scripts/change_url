@@ -15,6 +15,13 @@ ynh_script_progression "Stopping $app's systemd service..."
 ynh_systemctl --service="$app" --action="stop"
 
 #=================================================
+# UPDATE CONFIG FILE
+#=================================================
+ynh_script_progression "Updating $app's configuration files..."
+
+ynh_config_add --template=".env" --destination="$install_dir/.env"
+
+#=================================================
 # MODIFY URL IN NGINX CONF
 #=================================================
 ynh_script_progression "Updating NGINX web server configuration..."
