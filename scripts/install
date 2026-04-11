@@ -54,7 +54,7 @@ if ! ynh_in_ci_tests; then
 #=================================================
 ynh_script_progression "Temporarily adding additional swap if needed..."
 
-myynh_add_swap
+#myynh_add_swap
 
 fi
 
