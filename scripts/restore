@@ -47,7 +47,7 @@ if ! ynh_in_ci_tests; then
 #=================================================
 # ADD SWAP IF NEEDED
 #=================================================
-ynh_script_progression "Temporary adding additional swap if needed..."
+ynh_script_progression "Temporarily adding additional swap if needed..."
 
 myynh_add_swap
 
@@ -61,9 +61,8 @@ ynh_script_progression "Installing $app..."
 pushd $install_dir
 	ynh_hide_warnings ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=4096" yarn
 	ynh_hide_warnings ynh_exec_as_app yarn workspace @calcom/prisma db-deploy
-	ynh_hide_warnings ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=8192" yarn build	
+	ynh_hide_warnings ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=8192" yarn build
 popd
-
 
 # We don't add swap in CI but well in real installations
 if ! ynh_in_ci_tests; then
@@ -72,7 +71,7 @@ if ! ynh_in_ci_tests; then
 #=================================================
 ynh_script_progression "Remove temporary swap if added..."
 
-ynh_del_swap_fixed
+ynh_del_swap
 
 fi
 

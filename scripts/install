@@ -30,8 +30,16 @@ ynh_setup_source --dest_dir="$install_dir"
 #=================================================
 ynh_script_progression "Adding $app's configuration files..."
 
+domain=$(ynh_app_setting_get --app=$app --key=key)
+if [[ "$domain" == *.*.* ]]; then
+  main_domain="${domain#*.}"
+else
+  main_domain="$domain"
+fi
+
 ynh_config_add --template=".env" --destination="$install_dir/.env"
-ynh_config_add --template=".env" --destination="$install_dir/.env.appStore"
+ynh_config_add --template=".env.appStore" --destination="$install_dir/.env.appStore"
+ynh_config_add --template="api.env" --destination="$install_dir/apps/api/v2/.env"
 
 #=================================================
 # SYSTEM CONFIGURATION
@@ -46,12 +54,16 @@ ynh_config_add_systemd
 
 yunohost service add "$app" --description="Appointment scheduling app" --log="/var/log/$app/$app.log"
 
+# We don't add swap in CI but well in real installations
+if ! ynh_in_ci_tests; then
 #=================================================
 # ADD SWAP IF NEEDED
 #=================================================
-ynh_script_progression "Temporary adding additional swap if needed..."
+ynh_script_progression "Temporarily adding additional swap if needed..."
 
 myynh_add_swap
+
+fi
 
 #=================================================
 # INSTALL CAL.COM WITH YARN
@@ -75,12 +87,16 @@ ynh_safe_rm $install_dir/node_modules/.cache
 ynh_safe_rm $install_dir/.yarn/cache
 ynh_safe_rm $install_dir/apps/web/.next/cache
 
+# We don't add swap in CI but well in real installations
+if ! ynh_in_ci_tests; then
 #=================================================
 # REMOVE TEMPORARY SWAP IF ADDED
 #=================================================
 ynh_script_progression "Remove temporary swap if added..."
 
-ynh_del_swap_fixed
+ynh_del_swap
+
+fi
 
 #=================================================
 # START SYSTEMD SERVICE
