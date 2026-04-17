@@ -7,7 +7,7 @@ name = "cal.com"
 description.en = "Appointment scheduling application"
 description.fr = "Application de planification de rendez-vous"
 
-version = "6.0.6~ynh1"
+version = "6.0.6~ynh2"
 
 maintainers = ["CodeShakingSheep"]
 
@@ -26,8 +26,8 @@ ldap = false
 sso = false
 
 disk = "50M"
-ram.build = "7500M"
-ram.runtime = "50M"
+ram.build = "2G"
+ram.runtime = "1G"
 
 [install]
     [install.domain]
@@ -41,9 +41,9 @@ ram.runtime = "50M"
 
     [resources.sources]
 
-    [resources.sources.main]
-    url = "https://github.com/calcom/cal.com/archive/refs/tags/v6.0.6.tar.gz"
-    sha256 = "6e4f1e1c2e0404b7e21cac3c51cab1e6258f78b92e4ff5d6c401e0aba14c7bb1"
+    [resources.sources.calcom_prebuilt]
+	url = "https://github.com/CodeShakingSheep/calcom-build/releases/download/calcom-v6.0.6/calcom-v6.0.6.tar.gz"
+	sha256 = "77780aacab113d51f58f3bf8d0c17ddd91081328d1a33866cebb1204aab6f1ea"
 
     autoupdate.strategy = "latest_github_tag"
 
@@ -58,10 +58,10 @@ ram.runtime = "50M"
     main.default = 3000
 
     [resources.apt]
-    packages = "postgresql, yarn"
+    packages = "postgresql"
 
     [resources.database]
     type = "postgresql"
 
     [resources.nodejs]
-    version = "22"
+    version = "20"

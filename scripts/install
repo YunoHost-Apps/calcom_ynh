@@ -7,8 +7,11 @@
 source _common.sh
 source /usr/share/yunohost/helpers
 
-key=$(ynh_string_random --length=32)
-ynh_app_setting_set --key="key" --value="$key"
+nextauth_secret=$(ynh_string_random --length=32)
+ynh_app_setting_set --key="nextauth_secret" --value="$nextauth_secret"
+
+calendso_encryption_key=$(ynh_string_random --length=32)
+ynh_app_setting_set --key="calendso_encryption_key" --value="$calendso_encryption_key"
 
 #=================================================
 # INSTALL DEPENDENCIES
@@ -23,15 +26,23 @@ ynh_hide_warnings corepack prepare yarn@latest --activate
 #=================================================
 ynh_script_progression "Setting up source files..."
 
-ynh_setup_source --dest_dir="$install_dir"
+ynh_setup_source --source_id="calcom_prebuilt" --dest_dir="$install_dir"
 
 #=================================================
 # APP INITIAL CONFIGURATION
 #=================================================
 ynh_script_progression "Adding $app's configuration files..."
 
+domain=$(ynh_app_setting_get --app=$app --key=key)
+if [[ "$domain" == *.*.* ]]; then
+  main_domain="${domain#*.}"
+else
+  main_domain="$domain"
+fi
+
 ynh_config_add --template=".env" --destination="$install_dir/.env"
-ynh_config_add --template=".env" --destination="$install_dir/.env.appStore"
+ynh_config_add --template=".env.appStore" --destination="$install_dir/.env.appStore"
+ynh_config_add --template="api.env" --destination="$install_dir/apps/api/v2/.env"
 
 #=================================================
 # SYSTEM CONFIGURATION
@@ -47,40 +58,29 @@ ynh_config_add_systemd
 yunohost service add "$app" --description="Appointment scheduling app" --log="/var/log/$app/$app.log"
 
 #=================================================
-# ADD SWAP IF NEEDED
+# INSTALL DEPENDENCIES WITH YARN
 #=================================================
-ynh_script_progression "Temporary adding additional swap if needed..."
-
-myynh_add_swap
-
-#=================================================
-# INSTALL CAL.COM WITH YARN
-#=================================================
-ynh_script_progression "Installing $app..."
+ynh_script_progression "Installing $app dependencies..."
 
 pushd $install_dir
-	ynh_hide_warnings ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=4096" yarn
+	ynh_hide_warnings ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=2048" yarn
 	ynh_hide_warnings ynh_exec_as_app yarn workspace @calcom/prisma db-deploy
-	ynh_hide_warnings ynh_exec_as_app NODE_OPTIONS="--max-old-space-size=8192" yarn build
 popd
 
+#=================================================
+# CLEAN UP
+#=================================================
+ynh_script_progression "Cleaning up $app..."
+
 # Remove unused files (by checking dockerfile and size found with  du -h --max-depth=1 /var/www/calcom | sort -hr)
-ynh_safe_rm $install_dir/.cache
 ynh_safe_rm $install_dir/.turbo
 ynh_safe_rm $install_dir/.github
 ynh_safe_rm $install_dir/docs
-ynh_safe_rm $install_dir/.agents
+ynh_safe_rm $install_dir/agents
 
 ynh_safe_rm $install_dir/node_modules/.cache
 ynh_safe_rm $install_dir/.yarn/cache
 ynh_safe_rm $install_dir/apps/web/.next/cache
-
-#=================================================
-# REMOVE TEMPORARY SWAP IF ADDED
-#=================================================
-ynh_script_progression "Remove temporary swap if added..."
-
-ynh_del_swap_fixed
 
 #=================================================
 # START SYSTEMD SERVICE

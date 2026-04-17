@@ -21,3 +21,5 @@ test_format = 1.0
     # Commits to test upgrade from
     # -------------------------------
     
+    test_upgrade_from.3f1bdfadf49e3eaf7c95d1ba8821bbf3877c85e0.name = "Upgrade from 6.0.6~ynh1 (before pre-built archive)"
+    
