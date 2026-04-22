@@ -46,6 +46,7 @@ ram.runtime = "1G"
 	sha256 = "77780aacab113d51f58f3bf8d0c17ddd91081328d1a33866cebb1204aab6f1ea"
 
     autoupdate.strategy = "latest_github_tag"
+	autoupdate.upstream = "https://github.com/CodeShakingSheep/calcom-build"
 
     [resources.system_user]
 
