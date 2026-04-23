@@ -38,7 +38,6 @@ ynh_setup_source --source_id="calcom_prebuilt" --dest_dir="$install_dir" --full_
 #=================================================
 ynh_script_progression "Updating $app's configuration files..."
 
-domain=$(ynh_app_setting_get --app=$app --key=key)
 if [[ "$domain" == *.*.* ]]; then
   main_domain="${domain#*.}"
 else
