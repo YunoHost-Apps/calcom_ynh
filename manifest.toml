@@ -47,6 +47,7 @@ ram.runtime = "1G"
 
     autoupdate.strategy = "latest_github_tag"
 	autoupdate.upstream = "https://github.com/CodeShakingSheep/calcom-build"
+    autoupdate.asset = "^calcom-v.*\\.tar.gz$"
 
     [resources.system_user]
     allow_email = true
