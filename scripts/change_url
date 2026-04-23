@@ -18,7 +18,6 @@ ynh_systemctl --service="$app" --action="stop"
 #=================================================
 ynh_script_progression "Updating $app's configuration files..."
 
-domain=$(ynh_app_setting_get --app=$app --key=key)
 if [[ "$domain" == *.*.* ]]; then
   main_domain="${domain#*.}"
 else
