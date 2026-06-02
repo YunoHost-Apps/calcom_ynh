@@ -45,7 +45,7 @@ ram.runtime = "1G"
 	url = "https://github.com/CodeShakingSheep/calcom-build/releases/download/calcom-v6.0.6/calcom-v6.0.6.tar.gz"
 	sha256 = "77780aacab113d51f58f3bf8d0c17ddd91081328d1a33866cebb1204aab6f1ea"
 
-    autoupdate.strategy = "latest_github_tag"
+    autoupdate.strategy = "latest_github_release"
 	autoupdate.upstream = "https://github.com/CodeShakingSheep/calcom-build"
     autoupdate.asset = "^calcom-v.*\\.tar.gz$"
 
