@@ -4,7 +4,6 @@
 # IMPORT GENERIC HELPERS
 #=================================================
 
-source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
@@ -13,6 +12,19 @@ source /usr/share/yunohost/helpers
 ynh_script_progression "Stopping $app's systemd service..."
 
 ynh_systemctl --service="$app" --action="stop"
+
+#=================================================
+# UPDATE CONFIG FILE
+#=================================================
+ynh_script_progression "Updating $app's configuration files..."
+
+if [[ "$domain" == *.*.* ]]; then
+  main_domain="${domain#*.}"
+else
+  main_domain="$domain"
+fi
+
+ynh_config_add --template=".env" --destination="$install_dir/.env"
 
 #=================================================
 # MODIFY URL IN NGINX CONF
